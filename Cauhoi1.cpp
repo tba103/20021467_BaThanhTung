@@ -12,5 +12,9 @@ void nFilter(char *s) {
 }
 int main()
 {
+	char *s;
+	cin >> s;
+	nFilter(s);
+	cout << s;
 	return 0;
 }

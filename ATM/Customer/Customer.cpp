@@ -1,7 +1,7 @@
 #include "Customer.h"
 void InputHistory(string s)
 {
-    cerr << "this is Input History" << endl;
+    //cerr << "This is Input History" << endl;
     ofstream outfile;
     outfile.open("DealHistory.txt", ofstream:: app);
     if( !outfile.is_open())
@@ -10,44 +10,42 @@ void InputHistory(string s)
     }
     else
     {
-        cerr << "open file"<< endl;
-        outfile << s;
-        outfile << endl;
-        cout << s << endl;
+        // take the current time to infile >>
+        time_t now = time(NULL);
+        char * currentdate = ctime(&now);
+        //cerr << "Open file"<< endl;
+        outfile << s << " " << currentdate;
+        //outfile << endl;
+        //cout <<  s << " " << currentdate << endl;
+        delete[]currentdate;
     }
     outfile.close();
-    cerr << "Input History completed" << endl;
+    //cerr << "Input History completed" << endl;
 }
-int OutputHistory( char **his)
+void OutputHistory()
 {
-     cout<< "This is OutputHistory" << endl;
+     //cerr<< "This is OutputHistory" << endl;
     ifstream infile("DealHistory.txt");
-    int k=0;
     if( infile.is_open())
     {
-        cerr << " File is opened" << endl;
-        while ( !infile.eof())
+        //cerr << " File is opened" << endl;
+        do
         {
-            string res="";
-            infile >> res;
-            for( int i=0 ; i< res.size(); i++)
-            {
-                 *(*(his+k)+i) = res[i];
-                 //cout << *(*(s+k)+i);
-            }
-            k++;
-            //cout << endl;
+            string res;
+            getline(infile,res);
+            cout << res << endl;
         }
+        while ( !infile.eof());
     }
     else{
         cerr << "Can't open file DealHistory.txt" << endl;
     }
     cerr << "OutputHistory is completed" << endl;
-    return k;
+    return;
 }
 void  Customer::Nhap(string data) // ghi du lieu lay ra tu data.txt sang dang du lieu class Customer
     {
-        cerr << "This is Nhap" << endl;
+        //cerr << "This is Nhap" << endl;
         string x="";
         int _money=0;
         int i=0;
@@ -94,32 +92,74 @@ void  Customer::Nhap(string data) // ghi du lieu lay ra tu data.txt sang dang du
         }
             money = _money;
         cout << ID << " " << pass << " " << money << endl;
-        cerr << "Nhap is completed" << endl;
+        //cerr << "Nhap is completed" << endl;
         return;
     }
 void Customer:: Xuat() // hien thi sau khi dang nhap thanh cong
     {
-        cerr << "This is Xuat" << endl;
+        //cerr << "This is Xuat" << endl;
         cout << "ID cua ban la: " << ID << endl;
         cout << "Mat khau cua ban la: " << pass << endl;
         cout << "So tien cua ban la: " << money << endl;
         cerr << "Xuat is completed" << endl;
+        InputHistory("Administrator user access ATM History");
     }
-bool checkATM( Customer &Cus, int atm[6], int money)
+bool checkATM( Customer &Cus, int atm[6], int money, int _atm[6])
 {
-    return false;
+    //cout << "This is check ATM" << endl;
+    cout << "So tien ban co la " << Cus.money << endl;
+    cout << "So tien ban muon rut la " << money << endl;
+    //cout << "Cac menh gia hien co la ";
+    for( int i=0; i < 6 ; i++) cout << atm[i] << " ";
+    cout << endl;
+    int copyatm[6];
+    // tao mang dong luu su thay doi so luong cac loai tien
+    for( int i=0; i < 6 ; i++) copyatm[i] = atm[i];
+    int value[]={10000,20000,50000,100000,200000,500000};
+    // tao mang dong luu gia tri ung voi moi loai tien
+    if ( money > Cus.money) return false;
+    // gia tri rut vuot so tien co trong tai khoan
+    int maxvalue=0;
+    for( int i=5; i >=0 ; i--)
+    {
+        if( money >= value[i] )
+        {
+              // tim menh gia lon nhat co the rut
+              maxvalue = i;
+              break;
+        }
+    }
+    while(money>0 && maxvalue>=0)
+    {
+        // lay dan tien menh gia tu lon den be
+        if(money >= value[maxvalue] && copyatm[maxvalue] >0)
+        {
+            _atm[maxvalue]++;
+            copyatm[maxvalue]--;
+            money -= value[maxvalue];
+        }
+        else maxvalue--;
+    }
+    if( money >0) return false;
+    else{
+        cout << "Thoa man check ATM" << endl;
+        for( int i=0; i < 6 ; i++)
+            atm[i] = copyatm[i];
+        return true;
+    }
 
+    return true;
 }
 void OutputATM( int atm[6])
 {
 
     // lay du tieu so tien trong ATM
-    cout<< "This is OutputATM" << endl;
+    //cerr<< "This is OutputATM" << endl;
     ifstream infile("MoneyATM.txt");
     if(!infile.is_open()) cerr << "Can't open file MoneyATM.txt" << endl;
     else
     {
-        cerr << "Open file MoneyATM.txt" << endl;
+        //cerr << "Open file MoneyATM.txt" << endl;
         int i=0;
         while(!infile.eof())
         {
@@ -132,7 +172,7 @@ void OutputATM( int atm[6])
 }
 void InputData(string a, string b, string c) // dua thong tin vao file data.txt
 {
-    cerr << " this is Input data" << endl;
+    //cerr << " this is Input data" << endl;
     string res = a + ',' + b +',' + c ;
     res[res.size()] = '/0';
     ofstream outfile;
@@ -155,12 +195,12 @@ void InputData(string a, string b, string c) // dua thong tin vao file data.txt
 
 int OutputData( char **s) // lay ra thong tin tu data.txt de check va so luong CustomerData
 {
-    cerr << "This is outputData" << endl;
+    //cerr << "This is outputData" << endl;
     ifstream infile("CustomerData.txt");
     int k=0;
     if( infile.is_open())
     {
-        cerr << " File is opened" << endl;
+        //cerr << " File is opened" << endl;
         while ( !infile.eof())
         {
             string res="";
@@ -190,7 +230,6 @@ bool checkSignIn( Customer *Cus,int &number, string ID, string pass, int &stt) /
         {
             //cerr << "Da tim thay ID va pass" << endl;
             stt = i;
-            cout << stt << endl;
             return true;
         }
     }
@@ -207,7 +246,6 @@ bool checkSignUp( Customer *Cus,int &number, string ID, int &stt) // kiem tra ta
         }
     }
     stt = number;
-    cout << stt << endl;
     return true;
 }
 
@@ -289,85 +327,125 @@ void Appear( Customer *Cus, int &number, int atm[6]) // man hinh hien thi
             Cus[stt].money =0;
         }
         number++;
-        cout << "Number thay doi::" << number << endl;
         ID = ID + " signed up.";
         InputHistory(ID);
     }
 
 
     // Giao dien man hinh
-    cout << "Dang nhap thanh cong!!" << endl;
-    cout << "Chon yeu cau ban mong muon:" << endl;
-    cout << "1. Nap tien " << endl;
-    cout << "2. Rut tien" << endl;
-    cout << "3. Van tin tai khoan" << endl;
-    int request=0,repeat=0;
+    int access=0;
     do
     {
-        if(repeat>0) cout <<"Vui long chon dung phim theo yeu cau!!" << endl;
-        repeat++;
-        cin >> request;
-    }
-    while(request !=1 && request != 2 && request != 3);
-    if(1 == request ) // naptien
-    {
-        cout << "So tien ban muon nap la: "<< endl;
-        cout << "Vui long ghi ro so to tien tuong ung menh gia" << endl;
-        int Kofm[6]={0,0,0,0,0,0};
-        cout << "So to menh gia 10000 dong la: ";
-        cin >> Kofm[0];
-        atm[0] +=Kofm[0];
-        cout << endl;
-        cout << "So to menh gia 20000 dong la: ";
-        cin >> Kofm[1];
-        atm[1] +=Kofm[1];
-        cout << endl;
-        cout << "So to menh gia 50000 dong la: ";
-        cin >> Kofm[2];
-        atm[2] +=Kofm[2];
-        cout << endl;
-        cout << "So to menh gia 100000 dong la: ";
-        cin >> Kofm[3];
-        atm[3] +=Kofm[3];
-        cout << endl;
-        cout << "So to menh gia 200000 dong la: ";
-        cin >> Kofm[4];
-        atm[4] +=Kofm[4];
-        cout << endl;
-        cout << "So to menh gia 500000 dong la: ";
-        cin >> Kofm[5];
-        atm[5] +=Kofm[5];
-        cout << endl;
-        Cus[stt].money += Kofm[0]*10000 + Kofm[1]*20000 + Kofm[2]*50000 + Kofm[3]*100000 + Kofm[4]*200000 + Kofm[5]*500000 ;
-        string now = Cus[stt].ID + " recharge money to card.";
-        InputHistory(now);
-    }
-    else if(2 == request)
-    {
-        int money=0,laprut=0;
+        cout << "Dang nhap thanh cong!!" << endl;
+        cout << "Chon yeu cau ban mong muon:" << endl;
+        cout << "1. Nap tien " << endl;
+        cout << "2. Rut tien" << endl;
+        cout << "3. Van tin tai khoan" << endl;
+        cout << "4. Xem lich su giao dich" << endl;
+        int request=0,repeat=0;
         do
         {
-            if (laprut >0) cout << "So tien khong thoa man, vui long nhap lai!!" << endl;
-            cout << "So tien ban muon rut la:" << endl;
-            cin >> money;
+            if(repeat>0)
+            cout <<"Vui long chon dung phim theo yeu cau!!" << endl;
+            repeat++;
+            cin >> request;
         }
-        while(checkATM(Cus[stt],atm,money));
-        Cus[stt].money -= money;
-        string now = Cus[stt].ID + " took money.";
-        InputHistory(now);
+        while(request !=1 && request != 2 && request != 3 && request != 4);
+        if(1 == request ) // naptien
+        {
+            cout << "So tien ban muon nap la: "<< endl;
+            cout << "Vui long ghi ro so to tien tuong ung menh gia" << endl;
+            int Kofm[6]={0,0,0,0,0,0};
+            cout << "So to menh gia 10000 dong la: ";
+            cin >> Kofm[0];
+            atm[0] +=Kofm[0];
+            cout << endl;
+            cout << "So to menh gia 20000 dong la: ";
+            cin >> Kofm[1];
+            atm[1] +=Kofm[1];
+            cout << endl;
+            cout << "So to menh gia 50000 dong la: ";
+            cin >> Kofm[2];
+            atm[2] +=Kofm[2];
+            cout << endl;
+            cout << "So to menh gia 100000 dong la: ";
+            cin >> Kofm[3];
+            atm[3] +=Kofm[3];
+            cout << endl;
+            cout << "So to menh gia 200000 dong la: ";
+            cin >> Kofm[4];
+            atm[4] +=Kofm[4];
+            cout << endl;
+            cout << "So to menh gia 500000 dong la: ";
+            cin >> Kofm[5];
+            atm[5] +=Kofm[5];
+            cout << endl;
+            Cus[stt].money += Kofm[0]*10000 + Kofm[1]*20000 + Kofm[2]*50000 + Kofm[3]*100000 + Kofm[4]*200000 + Kofm[5]*500000 ;
+            string now = Cus[stt].ID + " recharge money to card.";
+            cout << "Nap tien thanh cong!" << endl;
+            InputHistory(now);
+        }
+        else if(2 == request)
+        {
+            int money=0,laprut=0;
+            int value[]={10000,20000,50000,100000,200000,500000};
+            // tao mang luu gia tri ung voi moi menh gia tien
+            int minmoney = value[0], mincount=0;
+            // minmoney luu so tien toi thieu rut duoc
+            // mincount luu vi tri cua menh gia do trong mang atm[6]
+            int _atm[]={0,0,0,0,0,0};
+            while(true)
+            {
+                if(atm[mincount] >0)
+                {
+                    // lay duoc gia tri toi thieu
+                    minmoney = value[mincount];
+                    break;
+                }
+                mincount++;
+            }
+            do
+            {
+                if (laprut == 0) cout << "So tien toi thieu ban co the rut la " << value[mincount] << " dong" << endl;
+                if (laprut >0) cout << "So tien khong thoa man, vui long nhap lai!!" << endl;
+                laprut++;
+                cout << "So tien ban muon rut la:" << endl;
+                cin >> money;
+            }
+            while(!checkATM(Cus[stt],atm,money,_atm)); // dieu kien de rut tien
+            cout << "Rut tien thanh cong" << endl;
+            minmoney =0;
+            for( int i =0; i < 6 ; i++) minmoney += value[i]*_atm[i];
+            cout << "So tien ban rut la " << minmoney << endl;
+            cout << "Bao gom: ";
+            for( int i=0; i < 6 ; i++)
+            {
+                if( 0 != _atm[i])
+                cout << _atm[i] << " to " << value[i] << " dong, ";
+            }
+            Cus[stt].money -= money;
+            string now = Cus[stt].ID + " took money.";
+            InputHistory(now);
+        }
+        else if(3 == request)
+        {
+            Cus[stt].Xuat();
+            string now = Cus[stt].ID + " inquired information account";
+            InputHistory(now);
+        }
+        else
+        {
+            OutputHistory();
+        }
+        cout << "Ban co muon thuc hien giao dich khac?" << endl;
+        cout << "Vui long an phim 1 de thuc hien hoac an phim 0 de ket thuc!"<< endl;
+        cin >> access;
     }
-    else
-    {
-        cout << "stt la" << stt << endl;
-        Cus[stt].Xuat();
+    while(1== access);
     }
-    return;
-}
 void UpdateCustomerData( Customer *Cus, int &number)
 {
-
-
-    cerr << " this is Update data" << endl;
+    // cerr << " this is Update data" << endl;
     string s ="";
     ofstream outfile;
     outfile.open("CustomerData.txt", ofstream:: trunc);
@@ -377,7 +455,7 @@ void UpdateCustomerData( Customer *Cus, int &number)
     }
     else
     {
-        cerr << "open file"<< endl;
+        //cerr << "open file"<< endl;
         for( int i=0 ; i< number; i++)
         {
             s = Cus[i].ID + ',' + Cus[i].pass +',' + to_string(Cus[i].money);
@@ -393,7 +471,7 @@ void UpdateCustomerData( Customer *Cus, int &number)
 }
 void UpdateATM(int atm[6])
 {
-    cerr << " this is Update ATM" << endl;
+    //cerr << " this is Update ATM" << endl;
     ofstream outfile;
     outfile.open("MoneyATM.txt", ofstream:: trunc);
     if( !outfile.is_open())
@@ -402,7 +480,7 @@ void UpdateATM(int atm[6])
     }
     else
     {
-        cerr << "open file"<< endl;
+       // cerr << "open file"<< endl;
         for( int i=0 ; i< 6; i++)
         {
             outfile << atm[i];

@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <cstring>
+#include <ctime>
 using namespace std;
 class Customer
 {
@@ -26,7 +27,7 @@ void Appear( Customer *Cus, int &number, int atm[6]);
 void OutputATM( int atm[6]);
 void BestChoice(int atm[6]);
 void UpdateATM(int atm[6]);
-int OutputHistory( char **s);
+void OutputHistory();
 void InputHistory(string s);
-bool checkATM( Customer &Cus, int atm[6], int money);
+bool checkATM( Customer &Cus, int atm[6], int money, int _atm[6]);
 #endif

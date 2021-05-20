@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1618744089 source:c:\users\tungb\onedrive\desktop\customer\main.cpp
+	"Customer.h"
+
+1618744504 c:\users\tungb\onedrive\desktop\customer\customer.h
+	<iostream>
+
+1618744136 source:c:\users\tungb\onedrive\desktop\customer\customer.cpp
+	"Customer.h"
+
+1621271834 source:c:\users\tungb\onedrive\desktop\atm\customer\customer.cpp
+	"Customer.h"
+
+1621271633 c:\users\tungb\onedrive\desktop\atm\customer\customer.h
+	<iostream>
+	<fstream>
+	<vector>
+	<string>
+	<cstring>
+
+1621270562 source:c:\users\tungb\onedrive\desktop\atm\customer\main.cpp
+	"Customer.h"
+

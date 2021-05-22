@@ -91,7 +91,7 @@ void  Customer::Nhap(string data) // ghi du lieu lay ra tu data.txt sang dang du
             _money = _money*10 + k;
         }
             money = _money;
-        cout << ID << " " << pass << " " << money << endl;
+       // cout << ID << " " << pass << " " << money << endl;
         //cerr << "Nhap is completed" << endl;
         return;
     }
@@ -102,7 +102,6 @@ void Customer:: Xuat() // hien thi sau khi dang nhap thanh cong
         cout << "Mat khau cua ban la: " << pass << endl;
         cout << "So tien cua ban la: " << money << endl;
         cerr << "Xuat is completed" << endl;
-        InputHistory("Administrator user access ATM History");
     }
 bool checkATM( Customer &Cus, int atm[6], int money, int _atm[6])
 {
@@ -183,7 +182,7 @@ void InputData(string a, string b, string c) // dua thong tin vao file data.txt
     }
     else
     {
-        cerr << "open file"<< endl;
+        //cerr << "open file"<< endl;
          outfile << endl;
          outfile << res;
          cout << res << endl;
@@ -241,7 +240,7 @@ bool checkSignUp( Customer *Cus,int &number, string ID, int &stt) // kiem tra ta
     {
         if (Cus[i].ID == ID )
         {
-            cerr << "ID bi lap" << endl;
+            //cerr << "ID bi lap" << endl;
             return false;
         }
     }
@@ -297,6 +296,7 @@ void Appear( Customer *Cus, int &number, int atm[6]) // man hinh hien thi
     {   // Thao tac Dang ki
          string pass1,pass2,money;
         do{
+        lap=0;
         k++;
         if(k>1)
         {
@@ -336,7 +336,7 @@ void Appear( Customer *Cus, int &number, int atm[6]) // man hinh hien thi
     int access=0;
     do
     {
-        cout << "Dang nhap thanh cong!!" << endl;
+        if( 0 == access) cout << "Dang nhap thanh cong!!" << endl;
         cout << "Chon yeu cau ban mong muon:" << endl;
         cout << "1. Nap tien " << endl;
         cout << "2. Rut tien" << endl;
@@ -383,6 +383,7 @@ void Appear( Customer *Cus, int &number, int atm[6]) // man hinh hien thi
             Cus[stt].money += Kofm[0]*10000 + Kofm[1]*20000 + Kofm[2]*50000 + Kofm[3]*100000 + Kofm[4]*200000 + Kofm[5]*500000 ;
             string now = Cus[stt].ID + " recharge money to card.";
             cout << "Nap tien thanh cong!" << endl;
+            cout << "So tien trong tai khoan cua ban la: " << Cus[stt].money << endl;
             InputHistory(now);
         }
         else if(2 == request)
@@ -435,8 +436,34 @@ void Appear( Customer *Cus, int &number, int atm[6]) // man hinh hien thi
         }
         else
         {
-            OutputHistory();
+            string s="";
+            int k=0;
+            do
+            {
+                if( 5==k)
+                {
+                    cout << "Ban da nhap sai 5 lan, chuc nang xem lich su giao dich tam thoi bi khoa" << endl;
+                    cout << "Vui long thuc hien cac giao dich khac!!" << endl;
+                    break;
+                }
+                if(k>0)
+                {
+                    cout << "Ban da nhap sai mat ma" << endl;
+                    cout << "Ban con "<< 5-k << " lan nhap ma" << endl;
+                }
+                if( 0==k) cout << "De xem lich su giao dich can ma bao mat ATM" << endl;
+                cout << "Vui long nhap ma bao mat" << endl;
+                cin >> s;
+                k++;
+            }
+            while( s!= "bathanhtung" );
+            if( 5!= k)
+            {
+                OutputHistory();
+                InputHistory("Administrator user access ATM History");
+            }
         }
+         Sleep(2000);
         cout << "Ban co muon thuc hien giao dich khac?" << endl;
         cout << "Vui long an phim 1 de thuc hien hoac an phim 0 de ket thuc!"<< endl;
         cin >> access;
@@ -461,7 +488,7 @@ void UpdateCustomerData( Customer *Cus, int &number)
             s = Cus[i].ID + ',' + Cus[i].pass +',' + to_string(Cus[i].money);
             s[s.size()] = '/0';
             outfile << s;
-            cout << s << endl;
+            //cout << s << endl;
             if ( i!= number-1) outfile << endl;
         }
     }

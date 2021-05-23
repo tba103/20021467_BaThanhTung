@@ -18,6 +18,7 @@ int main()
     {
          Cus[i].Nhap(s[i]);
     }
+    cout << string(40,'-')<< endl;
     Appear(Cus,n,atm);
     UpdateCustomerData(Cus,n);
     UpdateATM(atm);
